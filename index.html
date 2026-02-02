@@ -771,6 +771,70 @@
             font-weight: bold;
             font-size: 9pt;
         }
+
+        /* تصميم حقل الإدخال مع قائمة الإكمال التلقائي */
+        .employee-input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .employee-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-top: none;
+            border-radius: 0 0 3px 3px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .employee-suggestion-item {
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 9.5pt;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .employee-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .employee-suggestion-item:hover,
+        .employee-suggestion-item.active {
+            background-color: #f7fafc;
+            color: #2c5282;
+        }
+
+        .employee-suggestion-item.new-employee {
+            color: #c53030;
+            font-weight: bold;
+            background-color: #fff5f5;
+        }
+
+        .employee-suggestion-item.new-employee:before {
+            content: "+ ";
+            color: #38a169;
+        }
+
+        .employee-input-container input {
+            width: 100%;
+        }
+
+        .employee-add-notice {
+            font-size: 7.5pt;
+            color: #718096;
+            margin-top: 2px;
+            display: block;
+            text-align: right;
+            font-style: italic;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -847,21 +911,12 @@
                 </div>
 
                 <div class="info-item">
-                    <label for="employee-name">اسم الموظف:</label>
-                    <select id="employee-name" class="print-field compact-field">
-                        <option value="">اختر الموظف</option>
-                        <option value="برينس انوبيل">برينس انوبيل</option>
-                        <option value="سهيل خان صاحب علي خان">سهيل خان صاحب علي خان</option>
-                        <option value="ايمانويل يبواه">ايمانويل يبواه</option>
-                        <option value="مايكل انيرتي اوكو">مايكل انيرتي اوكو</option>
-                        <option value="عثمان صالح عثمان حامد">عثمان صالح عثمان حامد</option>
-                        <option value="اسلام ماهر عبد الرازق ابراهيم الغندور">اسلام ماهر عبد الرازق ابراهيم الغندور</option>
-                        <option value="فادي يوسف العلوه">فادي يوسف العلوه</option>
-                        <option value="مانوري حمانى">مانوري حمانى</option>
-                        <option value="فرانسيس نانا بلاي">فرانسيس نانا بلاي</option>
-                        <option value="عبد الرحمن عبدالله احمد عبدالله">عبد الرحمن عبدالله احمد عبدالله</option>
-                        <option value="وليد خضر السيد خليل ابراهيم">وليد خضر السيد خليل ابراهيم</option>
-                    </select>
+                    <label for="employee-input">اسم الموظف:</label>
+                    <div class="employee-input-container">
+                        <input type="text" id="employee-input" placeholder="اكتب اسم الموظف أو اختر من القائمة" class="print-field compact-field">
+                        <div class="employee-suggestions" id="employee-suggestions"></div>
+                    </div>
+                    <span class="employee-add-notice">يمكنك كتابة اسم جديد وسيتم إضافته تلقائياً للقائمة</span>
                 </div>
 
                 <div class="info-item">
@@ -962,7 +1017,6 @@
                             <div style="margin-top: 1px; font-size: 1pt; color: #c19a53;">
                                 <i class="fas fa-stamp"></i>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>
@@ -1228,10 +1282,303 @@
         }
 
         // =============================================
+        // إدارة قائمة الموظفين المحسنة
+        // =============================================
+
+        class EmployeeManager {
+            constructor() {
+                this.employees = this.getDefaultEmployees();
+                this.currentIndex = -1;
+                this.loadSavedEmployees();
+                this.initEventListeners();
+            }
+
+            // الحصول على القائمة الافتراضية للموظفين
+            getDefaultEmployees() {
+                return [
+                    "برينس انوبيل",
+                    "سهيل خان صاحب علي خان",
+                    "ايمانويل يبواه",
+                    "مايكل انيرتي اوكو",
+                    "عثمان صالح عثمان حامد",
+                    "اسلام ماهر عبد الرازق ابراهيم الغندور",
+                    "فادي يوسف العلوه",
+                    "مانوري حمانى",
+                    "فرانسيس نانا بلاي",
+                    "عبد الرحمن عبدالله احمد عبدالله"
+                ];
+            }
+
+            // تحميل الموظفين المحفوظين
+            loadSavedEmployees() {
+                const savedEmployees = localStorage.getItem('valenciaEmployees');
+                if (savedEmployees) {
+                    try {
+                        const parsed = JSON.parse(savedEmployees);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            // دمج القوائم مع تجنب التكرار
+                            const merged = [...new Set([...parsed, ...this.employees])];
+                            this.employees = merged;
+                        }
+                    } catch (e) {
+                        console.error('خطأ في تحميل قائمة الموظفين:', e);
+                    }
+                }
+            }
+
+            // حفظ قائمة الموظفين
+            saveEmployees() {
+                localStorage.setItem('valenciaEmployees', JSON.stringify(this.employees));
+            }
+
+            // إضافة موظف جديد
+            addEmployee(name) {
+                if (!name || !name.trim()) return false;
+
+                const trimmedName = name.trim();
+
+                // التحقق من عدم وجود الموظف مسبقاً
+                if (!this.employees.includes(trimmedName)) {
+                    this.employees.unshift(trimmedName); // إضافة في البداية
+                    this.saveEmployees();
+                    return true;
+                }
+
+                return false;
+            }
+
+            // البحث عن موظفين
+            searchEmployees(query) {
+                if (!query || !query.trim()) {
+                    return this.employees.slice(0, 10); // إرجاع أول 10 موظفين
+                }
+
+                const lowerQuery = query.toLowerCase();
+                return this.employees.filter(employee => 
+                    employee.toLowerCase().includes(lowerQuery)
+                ).slice(0, 10); // إرجاع أول 10 نتائج
+            }
+
+            // تهيئة مستمعات الأحداث
+            initEventListeners() {
+                const input = document.getElementById('employee-input');
+                const suggestions = document.getElementById('employee-suggestions');
+
+                if (!input) return;
+
+                // عند كتابة في حقل الإدخال
+                input.addEventListener('input', (e) => {
+                    const query = e.target.value;
+                    this.showSuggestions(query);
+                    saveData(); // حفظ البيانات
+                });
+
+                // عند النقر خارج القائمة
+                document.addEventListener('click', (e) => {
+                    if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+                        suggestions.style.display = 'none';
+                    }
+                });
+
+                // عند التركيز على الحقل
+                input.addEventListener('focus', () => {
+                    if (input.value.trim() === '') {
+                        this.showSuggestions('');
+                    }
+                });
+
+                // التعامل مع مفاتيح لوحة المفاتيح
+                input.addEventListener('keydown', (e) => {
+                    const items = suggestions.querySelectorAll('.employee-suggestion-item');
+                    
+                    switch (e.key) {
+                        case 'ArrowDown':
+                            e.preventDefault();
+                            this.navigateSuggestions(1);
+                            break;
+                        case 'ArrowUp':
+                            e.preventDefault();
+                            this.navigateSuggestions(-1);
+                            break;
+                        case 'Enter':
+                            e.preventDefault();
+                            this.selectCurrentSuggestion();
+                            break;
+                        case 'Escape':
+                            suggestions.style.display = 'none';
+                            break;
+                        case 'Tab':
+                            if (suggestions.style.display === 'block') {
+                                this.selectCurrentSuggestion();
+                            }
+                            break;
+                    }
+                });
+
+                // إضافة موظف جديد عند ترك الحقل إذا كان هناك قيمة جديدة
+                input.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        const value = input.value.trim();
+                        if (value && !this.employees.includes(value)) {
+                            this.addEmployee(value);
+                            showAutoSendNotification(`✅ تم إضافة الموظف "${value}" إلى القائمة`, 'success');
+                        }
+                    }, 200);
+                });
+            }
+
+            // عرض اقتراحات الموظفين
+            showSuggestions(query) {
+                const input = document.getElementById('employee-input');
+                const suggestions = document.getElementById('employee-suggestions');
+                
+                if (!input || !suggestions) return;
+
+                const results = this.searchEmployees(query);
+                const exactMatch = results.find(emp => emp === query);
+                const hasExactMatch = !!exactMatch;
+                const inputValue = query.trim();
+
+                // بناء HTML للاقتراحات
+                let html = '';
+
+                // إذا كان هناك تطابق تام، عرضه أولاً
+                if (hasExactMatch) {
+                    html += `<div class="employee-suggestion-item active" data-value="${exactMatch}">${exactMatch}</div>`;
+                    this.currentIndex = 0;
+                }
+
+                // عرض النتائج الأخرى
+                results.forEach((employee, index) => {
+                    if (employee !== exactMatch) {
+                        const adjustedIndex = hasExactMatch ? index + 1 : index;
+                        const isActive = adjustedIndex === this.currentIndex;
+                        html += `<div class="employee-suggestion-item ${isActive ? 'active' : ''}" 
+                                  data-value="${employee}">${employee}</div>`;
+                    }
+                });
+
+                // إذا كان النص غير موجود في القائمة وعبارة عن اسم جديد
+                if (inputValue && !hasExactMatch && inputValue.length > 2) {
+                    html += `<div class="employee-suggestion-item new-employee" 
+                              data-value="${inputValue}">إضافة "${inputValue}" كموظف جديد</div>`;
+                    
+                    // تعيين الفهرس النشط إذا لم يكن هناك اقتراحات أخرى
+                    if (results.length === 0) {
+                        this.currentIndex = 0;
+                        suggestions.querySelector('.employee-suggestion-item')?.classList.add('active');
+                    }
+                }
+
+                suggestions.innerHTML = html;
+                suggestions.style.display = html ? 'block' : 'none';
+
+                // إضافة مستمعات النقر
+                suggestions.querySelectorAll('.employee-suggestion-item').forEach((item, index) => {
+                    item.addEventListener('click', () => {
+                        const value = item.getAttribute('data-value');
+                        
+                        if (item.classList.contains('new-employee')) {
+                            // إضافة موظف جديد
+                            const newName = input.value.trim();
+                            if (newName) {
+                                this.addEmployee(newName);
+                                showAutoSendNotification(`✅ تم إضافة الموظف "${newName}" إلى القائمة`, 'success');
+                            }
+                        }
+                        
+                        input.value = value;
+                        suggestions.style.display = 'none';
+                        saveData();
+                        input.focus();
+                    });
+                });
+            }
+
+            // التنقل بين الاقتراحات باستخدام الأسهم
+            navigateSuggestions(direction) {
+                const suggestions = document.getElementById('employee-suggestions');
+                const items = suggestions.querySelectorAll('.employee-suggestion-item');
+                
+                if (items.length === 0) return;
+
+                // إزالة النشط من الجميع
+                items.forEach(item => item.classList.remove('active'));
+
+                // تحديث الفهرس
+                this.currentIndex += direction;
+
+                // التأكد من أن الفهرس ضمن النطاق
+                if (this.currentIndex < 0) this.currentIndex = items.length - 1;
+                if (this.currentIndex >= items.length) this.currentIndex = 0;
+
+                // إضافة النشط للعنصر الجديد
+                items[this.currentIndex].classList.add('active');
+
+                // تمرير العنصر إلى العرض
+                items[this.currentIndex].scrollIntoView({
+                    block: 'nearest',
+                    behavior: 'smooth'
+                });
+            }
+
+            // اختيار الاقتراح الحالي
+            selectCurrentSuggestion() {
+                const suggestions = document.getElementById('employee-suggestions');
+                const items = suggestions.querySelectorAll('.employee-suggestion-item');
+                const input = document.getElementById('employee-input');
+                
+                if (items.length === 0 || this.currentIndex < 0) return;
+
+                const selectedItem = items[this.currentIndex];
+                const value = selectedItem.getAttribute('data-value');
+                
+                if (selectedItem.classList.contains('new-employee')) {
+                    // إضافة موظف جديد
+                    const newName = input.value.trim();
+                    if (newName) {
+                        this.addEmployee(newName);
+                        showAutoSendNotification(`✅ تم إضافة الموظف "${newName}" إلى القائمة`, 'success');
+                    }
+                }
+                
+                input.value = value;
+                suggestions.style.display = 'none';
+                saveData();
+            }
+
+            // الحصول على قائمة جميع الموظفين
+            getAllEmployees() {
+                return [...this.employees];
+            }
+
+            // تحميل اسم الموظف الحالي
+            loadCurrentEmployee() {
+                const savedData = localStorage.getItem('valenciaOrderData');
+                if (savedData) {
+                    try {
+                        const data = JSON.parse(savedData);
+                        if (data.employeeName) {
+                            document.getElementById('employee-input').value = data.employeeName;
+                            
+                            // إضافة الاسم للقائمة إذا لم يكن موجوداً
+                            if (data.employeeName && !this.employees.includes(data.employeeName)) {
+                                this.addEmployee(data.employeeName);
+                            }
+                        }
+                    } catch (e) {
+                        console.error('خطأ في تحميل اسم الموظف:', e);
+                    }
+                }
+            }
+        }
+
+        // =============================================
         // متغيرات النظام
         // =============================================
 
         let serialManager;
+        let employeeManager;
 
         // =============================================
         // تهيئة الصفحة
@@ -1240,6 +1587,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // تهيئة مدير الرقم التسلسلي
             serialManager = new SerialNumberManager();
+
+            // تهيئة مدير الموظفين
+            employeeManager = new EmployeeManager();
 
             // تعيين التواريخ
             setCurrentDate();
@@ -1251,10 +1601,15 @@
             // تحميل البيانات المحفوظة
             loadSavedData();
 
+            // تحميل اسم الموظف الحالي
+            employeeManager.loadCurrentEmployee();
+
             // إضافة مستمعات الأحداث
             document.querySelectorAll('.print-field').forEach(field => {
-                field.addEventListener('input', saveData);
-                field.addEventListener('change', saveData);
+                if (field.id !== 'employee-input') {
+                    field.addEventListener('input', saveData);
+                    field.addEventListener('change', saveData);
+                }
             });
         });
 
@@ -1305,7 +1660,7 @@
         function saveData() {
             const data = {
                 orderType: document.getElementById('order-type').value,
-                employeeName: document.getElementById('employee-name').value,
+                employeeName: document.getElementById('employee-input').value,
                 employeeId: document.getElementById('employee-id').value,
                 jobTitle: document.getElementById('job-title').value,
                 departmentName: document.getElementById('department-name').value,
@@ -1325,7 +1680,6 @@
                     const data = JSON.parse(savedData);
 
                     document.getElementById('order-type').value = data.orderType || '';
-                    document.getElementById('employee-name').value = data.employeeName || '';
                     document.getElementById('employee-id').value = data.employeeId || '';
                     document.getElementById('job-title').value = data.jobTitle || '';
                     document.getElementById('department-name').value = data.departmentName || '';
@@ -1333,6 +1687,8 @@
                     document.getElementById('decision-details').value = data.decisionDetails || '';
                     document.getElementById('effective-date').value = data.effectiveDate || '';
                     document.getElementById('issuer-name').value = data.issuerName || '';
+                    
+                    // اسم الموظف يتم تحميله بشكل منفصل من خلال employeeManager
                 } catch (e) {
                     console.error('خطأ في تحميل البيانات المحفوظة:', e);
                     localStorage.removeItem('valenciaOrderData');
@@ -1568,9 +1924,9 @@
         // دالة الإرسال التلقائي إلى التليجرام
         // =============================================
         async function sendToTelegramAuto() {
-            const employeeName = document.getElementById('employee-name').value;
+            const employeeName = document.getElementById('employee-input').value;
 
-            if (!employeeName || !employeeName.trim() || employeeName === 'اختر الموظف') {
+            if (!employeeName || !employeeName.trim()) {
                 console.log('⚠️ لم يتم إرسال الأمر: اسم الموظف غير موجود');
                 showAutoSendNotification('❌ يرجى إدخال اسم الموظف أولاً', 'error');
                 return false;
@@ -1580,6 +1936,11 @@
             if (!decisionDetails || !decisionDetails.trim()) {
                 showAutoSendNotification('❌ يرجى إدخال تفاصيل القرار', 'error');
                 return false;
+            }
+
+            // إضافة الموظف للقائمة إذا كان جديداً
+            if (employeeManager) {
+                employeeManager.addEmployee(employeeName);
             }
 
             const chatId = TELEGRAM_CONFIG.CHANNELS.HR;
@@ -1647,8 +2008,8 @@
         // =============================================
         async function prepareAndPrint() {
             // التحقق من اكتمال البيانات
-            const employeeName = document.getElementById('employee-name').value;
-            if (!employeeName || !employeeName.trim() || employeeName === 'اختر الموظف') {
+            const employeeName = document.getElementById('employee-input').value;
+            if (!employeeName || !employeeName.trim()) {
                 showAutoSendNotification('❌ يرجى إدخال اسم الموظف أولاً', 'error');
                 return;
             }
@@ -1657,6 +2018,11 @@
             if (!decisionDetails || !decisionDetails.trim()) {
                 showAutoSendNotification('❌ يرجى إدخال تفاصيل القرار', 'error');
                 return;
+            }
+
+            // إضافة الموظف للقائمة إذا كان جديداً
+            if (employeeManager) {
+                employeeManager.addEmployee(employeeName);
             }
 
             // إنشاء رقم تسلسلي جديد
@@ -1680,7 +2046,7 @@
         // =============================================
         function generateTelegramMessage() {
             const orderType = document.getElementById('order-type').value || 'غير محدد';
-            const employeeName = document.getElementById('employee-name').value || 'غير معروف';
+            const employeeName = document.getElementById('employee-input').value || 'غير معروف';
             const employeeId = document.getElementById('employee-id').value || 'غير متوفر';
             const jobTitle = document.getElementById('job-title').value || 'غير محدد';
             const departmentName = document.getElementById('department-name').value || 'غير محدد';
@@ -1761,13 +2127,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
