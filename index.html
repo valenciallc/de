@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام إصدار الأوامر الإدارية - فالنسيا للرخام</title>
     <style>
-        /* أنماط كلاسيكية احترافية */
+        /* أنماط كلاسيكية احترافية - مع دعم الاتجاهين */
         @page {
             size: A4;
             margin: 0.3cm !important;
@@ -27,6 +27,36 @@
             color: #2d3748;
             font-size: 10pt;
             line-height: 1.5;
+            transition: all 0.2s;
+        }
+
+        /* أنماط خاصة باللغة الإنجليزية (LTR) */
+        body[lang="en"] {
+            direction: ltr;
+            text-align: left;
+        }
+        body[lang="en"] .header,
+        body[lang="en"] .document-info,
+        body[lang="en"] .info-item label,
+        body[lang="en"] .signature-section,
+        body[lang="en"] .control-panel,
+        body[lang="en"] .order-intro {
+            text-align: left;
+        }
+        body[lang="en"] .document-number {
+            margin-left: 0;
+            margin-right: 6px;
+        }
+        body[lang="en"] .employee-add-notice {
+            text-align: left;
+        }
+        body[lang="en"] .signature-line {
+            margin-left: 0;
+            margin-right: auto;
+        }
+        body[lang="en"] .order-intro {
+            border-right: none;
+            border-left: 2px solid #c19a53;
         }
 
         .header {
@@ -81,6 +111,9 @@
             flex: 1;
             text-align: right;
         }
+        body[lang="en"] .document-date {
+            text-align: left;
+        }
 
         .document-title {
             text-align: center;
@@ -105,6 +138,10 @@
             display: inline-block;
             flex: 1;
             margin-left: 6px;
+        }
+        body[lang="en"] .document-number {
+            margin-left: 0;
+            margin-right: 6px;
         }
 
         .control-panel {
@@ -155,6 +192,11 @@
             background: linear-gradient(135deg, #2c5282, #1a365d);
             color: white;
             border: 1px solid #2c5282;
+        }
+        .btn-lang {
+            background: linear-gradient(135deg, #6b46c1, #553c9a);
+            color: white;
+            border: 1px solid #6b46c1;
         }
 
         textarea, input, select {
@@ -217,6 +259,10 @@
             margin-left: auto;
             margin-right: auto;
         }
+        body[lang="en"] .signature-line {
+            margin-left: 0;
+            margin-right: auto;
+        }
 
         .signature-box strong {
             font-size: 9.5pt;
@@ -257,6 +303,10 @@
             border-radius: 3px;
             border-right: 2px solid #c19a53;
         }
+        body[lang="en"] .order-intro {
+            border-right: none;
+            border-left: 2px solid #c19a53;
+        }
 
         /* الطباعة - كل المحتوى في صفحة واحدة */
         @media print {
@@ -294,7 +344,6 @@
                 margin-bottom: 120px !important;
             }
 
-            /* الرأس الثابت للطباعة */
             .print-header {
                 position: fixed !important;
                 top: 0 !important;
@@ -484,7 +533,6 @@
                 display: block !important;
             }
 
-            /* القدم الثابت للطباعة */
             .print-footer {
                 position: fixed !important;
                 bottom: 0 !important;
@@ -512,7 +560,6 @@
                 display: none !important;
             }
 
-            /* تحسين توزيع العناصر */
             .document-content > * {
                 margin-bottom: 6px !important;
             }
@@ -521,14 +568,12 @@
                 margin-bottom: 0 !important;
             }
 
-            /* توزيع التواقيع بشكل متساو */
             .signature-section > div:first-child {
                 display: flex !important;
                 gap: 8px !important;
                 justify-content: space-between !important;
             }
 
-            /* معلومات التنفيذ والمصدّر */
             .no-break[style*="margin-top: 10px"] {
                 margin-top: 8px !important;
                 margin-bottom: 8px !important;
@@ -538,7 +583,6 @@
                 flex-shrink: 0;
             }
 
-            /* منع انقسام المحتوى بين الصفحات */
             .avoid-break, .no-break {
                 page-break-inside: avoid !important;
                 page-break-before: avoid !important;
@@ -546,12 +590,10 @@
                 break-inside: avoid !important;
             }
 
-            /* ضمان أن المحتوى لا يتجاوز صفحة واحدة */
             .document-content > *:last-child {
                 page-break-after: avoid !important;
             }
 
-            /* توحيد الألوان للطباعة */
             * {
                 color: black !important;
             }
@@ -593,7 +635,6 @@
             }
         }
 
-        /* تنسيقات إضافية */
         .info-row {
             display: flex;
             gap: 8px;
@@ -649,7 +690,6 @@
             margin-bottom: 10px;
         }
 
-        /* تصميم مضغوط */
         .compact-field {
             margin: 0 !important;
             padding: 2px 4px !important;
@@ -659,7 +699,6 @@
             page-break-inside: avoid;
         }
 
-        /* نافذة الإشعار التلقائي */
         #auto-send-notification {
             position: fixed;
             bottom: 15px;
@@ -711,7 +750,6 @@
             to { opacity: 0; }
         }
 
-        /* نافذة التأكيد */
         .confirmation-modal {
             display: none;
             position: fixed;
@@ -772,7 +810,6 @@
             font-size: 9pt;
         }
 
-        /* تصميم حقل الإدخال مع قائمة الإكمال التلقائي */
         .employee-input-container {
             position: relative;
             width: 100%;
@@ -835,6 +872,9 @@
             text-align: right;
             font-style: italic;
         }
+        body[lang="en"] .employee-add-notice {
+            text-align: left;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -849,33 +889,36 @@
     <!-- لوحة التحكم -->
     <div class="control-panel no-print">
         <div style="text-align: center; margin-bottom: 6px;">
-            <h2 style="margin: 0 0 3px 0; font-family: 'Times New Roman', serif; font-size: 11pt;">
+            <h2 style="margin: 0 0 3px 0; font-family: 'Times New Roman', serif; font-size: 11pt;" id="system-title">
                 <i class="fas fa-file-contract"></i> نظام إصدار الأوامر الإدارية
             </h2>
-            <h4 style="margin: 0; font-weight: normal; opacity: 0.9; font-family: 'Times New Roman', serif; font-size: 9.5pt;">
+            <h4 style="margin: 0; font-weight: normal; opacity: 0.9; font-family: 'Times New Roman', serif; font-size: 9.5pt;" id="company-subtitle-header">
                 شركة فالنسيا لتجارة الرخام والحجر الطبيعي
             </h4>
         </div>
 
         <div style="text-align: center;">
             <button class="btn btn-print" onclick="prepareAndPrint()">
-                <i class="fas fa-paper-plane"></i> طباعة وإرسال تلقائي
+                <i class="fas fa-paper-plane"></i> <span data-i18n="print_send">طباعة وإرسال تلقائي</span>
             </button>
             <button class="btn btn-manage" onclick="openSerialManager()">
-                <i class="fas fa-cog"></i> إدارة الرقم التسلسلي
+                <i class="fas fa-cog"></i> <span data-i18n="manage_serial">إدارة الرقم التسلسلي</span>
             </button>
             <button class="btn btn-reset" onclick="showResetConfirmation()">
-                <i class="fas fa-redo"></i> تصفير الرقم التسلسلي
+                <i class="fas fa-redo"></i> <span data-i18n="reset_serial">تصفير الرقم التسلسلي</span>
+            </button>
+            <button class="btn btn-lang" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i> <span id="lang-btn-text">English</span>
             </button>
         </div>
 
         <div class="serial-display">
-            <div>رقم الأمر الإداري الحالي:</div>
+            <div><span data-i18n="current_order_num">رقم الأمر الإداري الحالي:</span></div>
             <div><span id="current-serial-display">ORD-000001</span></div>
         </div>
 
         <div class="auto-calculation-note">
-            <i class="fas fa-info-circle"></i> يتم حفظ البيانات تلقائياً في المتصفح
+            <i class="fas fa-info-circle"></i> <span data-i18n="auto_save_note">يتم حفظ البيانات تلقائياً في المتصفح</span>
         </div>
     </div>
 
@@ -883,9 +926,9 @@
     <div class="content-container no-break">
         <div class="document-info">
             <div class="document-date" id="current-date">--/--/----</div>
-            <div class="document-title">أمـــر اداري</div>
+            <div class="document-title"><span data-i18n="admin_order">أمـــر اداري</span></div>
             <div style="text-align: center; flex: 1;">
-                <div style="font-size: 8pt; color: #4a5568; margin-bottom: 1px;">رقم</div>
+                <div style="font-size: 8pt; color: #4a5568; margin-bottom: 1px;" data-i18n="number_abbr">رقم</div>
                 <div class="document-number" id="serial-number">ORD-000001</div>
             </div>
         </div>
@@ -894,63 +937,63 @@
             <!-- معلومات الأمر الإداري -->
             <div class="info-row no-break">
                 <div class="info-item">
-                    <label for="order-type">نوع الأمر:</label>
+                    <label for="order-type" data-i18n="order_type">نوع الأمر:</label>
                     <select id="order-type" class="print-field compact-field">
-                        <option value="زيادة راتب">زيادة راتب</option>
-                        <option value="ترقية">ترقية</option>
-                        <option value="تجديد عقد عمل">تجديد عقد عمل</option>
-                        <option value="نقل">نقل</option>
-                        <option value="إنذار">إنذار</option>
-                        <option value="خصم">خصم</option>
-                        <option value="مكافأة">مكافأة</option>
-                        <option value="تعديل راتب">تعديل راتب</option>
-                        <option value="إجازة">إجازة</option>
-                        <option value="إنهاء خدمة">إنهاء خدمة</option>
-                        <option value="أخرى">أخرى</option>
+                        <option value="زيادة راتب" data-i18n-option="salary_increase">زيادة راتب</option>
+                        <option value="ترقية" data-i18n-option="promotion">ترقية</option>
+                        <option value="تجديد عقد عمل" data-i18n-option="contract_renewal">تجديد عقد عمل</option>
+                        <option value="نقل" data-i18n-option="transfer">نقل</option>
+                        <option value="إنذار" data-i18n-option="warning">إنذار</option>
+                        <option value="خصم" data-i18n-option="deduction">خصم</option>
+                        <option value="مكافأة" data-i18n-option="bonus">مكافأة</option>
+                        <option value="تعديل راتب" data-i18n-option="salary_adjustment">تعديل راتب</option>
+                        <option value="إجازة" data-i18n-option="leave">إجازة</option>
+                        <option value="إنهاء خدمة" data-i18n-option="termination">إنهاء خدمة</option>
+                        <option value="أخرى" data-i18n-option="other">أخرى</option>
                     </select>
                 </div>
 
                 <div class="info-item">
-                    <label for="employee-input">اسم الموظف:</label>
+                    <label for="employee-input" data-i18n="employee_name">اسم الموظف:</label>
                     <div class="employee-input-container">
-                        <input type="text" id="employee-input" placeholder="اكتب اسم الموظف أو اختر من القائمة" class="print-field compact-field">
+                        <input type="text" id="employee-input" placeholder="اكتب اسم الموظف أو اختر من القائمة" class="print-field compact-field" data-i18n-placeholder="employee_placeholder">
                         <div class="employee-suggestions" id="employee-suggestions"></div>
                     </div>
                     <span class="employee-add-notice"></span>
                 </div>
 
                 <div class="info-item">
-                    <label for="employee-id">رقم الهوية:</label>
-                    <input type="text" id="employee-id" placeholder="رقم الهوية / الإقامة" class="print-field compact-field">
+                    <label for="employee-id" data-i18n="id_number">رقم الهوية:</label>
+                    <input type="text" id="employee-id" placeholder="رقم الهوية / الإقامة" class="print-field compact-field" data-i18n-placeholder="id_placeholder">
                 </div>
             </div>
 
             <div class="info-row no-break">
                 <div class="info-item">
-                    <label for="job-title">المسمى الوظيفي:</label>
-                    <input type="text" id="job-title" placeholder="المسمى الوظيفي" class="print-field compact-field">
+                    <label for="job-title" data-i18n="job_title">المسمى الوظيفي:</label>
+                    <input type="text" id="job-title" placeholder="المسمى الوظيفي" class="print-field compact-field" data-i18n-placeholder="job_placeholder">
                 </div>
 
                 <div class="info-item">
-                    <label for="department-name">القسم:</label>
+                    <label for="department-name" data-i18n="department">القسم:</label>
                     <select id="department-name" class="print-field compact-field">
-                        <option value="">اختر القسم</option>
-                        <option value="المحاسبة">المحاسبة</option>
-                        <option value="المبيعات">المبيعات</option>
-                        <option value="ادارة مستودعات">ادارة مستودعات</option>
-                        <option value="النقليات">النقليات</option>
-                        <option value="الاليات">الاليات</option>
-                        <option value="المشاريع">المشاريع</option>
-                        <option value="الرخام">الرخام</option>
-                        <option value="التصميم">التصميم</option>
-                        <option value="السوشيال ميديا">السوشيال ميديا</option>
+                        <option value="" data-i18n-option="select_dept">اختر القسم</option>
+                        <option value="المحاسبة" data-i18n-option="accounting">المحاسبة</option>
+                        <option value="المبيعات" data-i18n-option="sales">المبيعات</option>
+                        <option value="ادارة مستودعات" data-i18n-option="warehouse">ادارة مستودعات</option>
+                        <option value="النقليات" data-i18n-option="transport">النقليات</option>
+                        <option value="الاليات" data-i18n-option="machinery">الاليات</option>
+                        <option value="المشاريع" data-i18n-option="projects">المشاريع</option>
+                        <option value="الرخام" data-i18n-option="marble">الرخام</option>
+                        <option value="التصميم" data-i18n-option="design">التصميم</option>
+                        <option value="السوشيال ميديا" data-i18n-option="social">السوشيال ميديا</option>
                     </select>
                 </div>
 
                 <div class="info-item">
-                    <label for="supervisor-name">المسؤول المباشر:</label>
+                    <label for="supervisor-name" data-i18n="direct_supervisor">المسؤول المباشر:</label>
                     <select id="supervisor-name" class="print-field compact-field">
-                        <option value="">اختر المسؤول</option>
+                        <option value="" data-i18n-option="select_supervisor">اختر المسؤول</option>
                         <option value="مهند نيازي السلق">مهند نيازي السلق</option>
                         <option value="ركان إياد زياز">ركان إياد زياز</option>
                         <option value="مأمون احمد حجازي">مأمون احمد حجازي</option>
@@ -962,61 +1005,63 @@
             </div>
 
             <!-- نص الأمر الإداري -->
-            <div class="order-intro no-break">
+            <div class="order-intro no-break" id="decision-intro">
                 قررنا نحن شركة فالنسيا للرخام والحجر الطبيعي ادارة الموارد البشــــــرية باتخاذ القرار التالي :-
             </div>
 
             <div class="no-break">
-                <label for="decision-details" style="display: block; margin-bottom: 4px; font-weight: bold; color: #2c5282; font-size: 9.5pt;">
+                <label for="decision-details" style="display: block; margin-bottom: 4px; font-weight: bold; color: #2c5282; font-size: 9.5pt;" data-i18n="decision_details">
                     تفاصيل القرار:
                 </label>
                 <textarea id="decision-details" class="decision-text print-field no-break"
-                          placeholder="اكتب هنا تفاصيل القرار الإداري..."></textarea>
+                          placeholder="اكتب هنا تفاصيل القرار الإداري..." data-i18n-placeholder="decision_placeholder"></textarea>
             </div>
 
             <!-- تاريخ التنفيذ والمصدّر -->
             <div class="no-break" style="margin-top: 10px; display: flex; gap: 8px;">
                 <div style="flex: 1;">
-                    <label for="effective-date" style="display: block; margin-bottom: 2px; font-weight: bold; color: #2c5282; font-size: 9.5pt;">
+                    <label for="effective-date" style="display: block; margin-bottom: 2px; font-weight: bold; color: #2c5282; font-size: 9.5pt;" data-i18n="effective_date">
                         تاريخ التنفيذ:
                     </label>
-                    <input type="text" id="effective-date" class="print-field compact-field" placeholder="يوم/شهر/سنة">
+                    <input type="text" id="effective-date" class="print-field compact-field" placeholder="يوم/شهر/سنة" data-i18n-placeholder="date_placeholder">
                 </div>
 
                 <div style="flex: 1;">
-                    <label for="issuer-name" style="display: block; margin-bottom: 2px; font-weight: bold; color: #2c5282; font-size: 9.5pt;">
+                    <label for="issuer-name" style="display: block; margin-bottom: 2px; font-weight: bold; color: #2c5282; font-size: 9.5pt;" data-i18n="issuer_name">
                         اسم مُصْدِر الأمر:
                     </label>
-                    <input type="text" id="issuer-name" class="print-field compact-field" placeholder="اسم مسؤول إدارة الموارد البشرية">
+                    <input type="text" id="issuer-name" class="print-field compact-field" placeholder="اسم مسؤول إدارة الموارد البشرية" data-i18n-placeholder="issuer_placeholder">
                 </div>
             </div>
 
             <!-- التواقيع -->
             <div class="signature-section no-break">
-                <div style="text-align: center; margin-bottom: 6px; font-weight: bold; font-size: 9.5pt; color: #1a365d;">
+                <div style="text-align: center; margin-bottom: 6px; font-weight: bold; font-size: 9.5pt; color: #1a365d;" data-i18n="signatures_title">
                     تواقيع المسؤولين
                 </div>
 
                 <div style="display: flex; gap: 6px;">
                     <div style="flex: 1;">
                         <div class="signature-box">
-                            <strong>توقيع المدير العام</strong>
+                            <strong data-i18n="gm_signature">توقيع المدير العام</strong>
                             <div class="signature-line"></div>
                         </div>
                     </div>
 
                     <div style="flex: 1;">
                         <div class="signature-box">
-                            <strong>توقيع مدير المالية</strong>
+                            <strong data-i18n="fm_signature">توقيع مدير المالية</strong>
+                            <div class="signature-line"></div>
                         </div>
                     </div>
 
                     <div style="flex: 1;">
                         <div class="signature-box">
-                            <strong>توقيع مدير القسم</strong>
+                            <strong data-i18n="hod_signature">توقيع مدير القسم</strong>
                             <div style="margin-top: 1px; font-size: 1pt; color: #c19a53;">
                                 <i class="fas fa-stamp"></i>
                             </div>
+                            <div class="signature-line"></div>
                         </div>
                     </div>
                 </div>
@@ -1030,14 +1075,230 @@
         // =============================================
 
         const TELEGRAM_CONFIG = {
-            // البوت الثابت المخصص للشركة
             BOT_TOKEN: "8281101424:AAE6ehBJYqVyf3DuvhnU2Lx0jFhcDA7-O5o",
-
-            // قنوات التليجرام الثابتة للشركة
             CHANNELS: {
-                HR: "-1003522590294",           // قناة الموارد البشرية
+                HR: "-1003522590294",
             }
         };
+
+        // =============================================
+        // نظام الترجمة (i18n)
+        // =============================================
+        const translations = {
+            ar: {
+                // عناوين وأزرار
+                'system-title': '<i class="fas fa-file-contract"></i> نظام إصدار الأوامر الإدارية',
+                'company-subtitle-header': 'شركة فالنسيا لتجارة الرخام والحجر الطبيعي',
+                'print_send': 'طباعة وإرسال تلقائي',
+                'manage_serial': 'إدارة الرقم التسلسلي',
+                'reset_serial': 'تصفير الرقم التسلسلي',
+                'current_order_num': 'رقم الأمر الإداري الحالي:',
+                'auto_save_note': 'يتم حفظ البيانات تلقائياً في المتصفح',
+                'admin_order': 'أمـــر اداري',
+                'number_abbr': 'رقم',
+                'order_type': 'نوع الأمر:',
+                'employee_name': 'اسم الموظف:',
+                'id_number': 'رقم الهوية:',
+                'job_title': 'المسمى الوظيفي:',
+                'department': 'القسم:',
+                'direct_supervisor': 'المسؤول المباشر:',
+                'decision_details': 'تفاصيل القرار:',
+                'effective_date': 'تاريخ التنفيذ:',
+                'issuer_name': 'اسم مُصْدِر الأمر:',
+                'signatures_title': 'تواقيع المسؤولين',
+                'gm_signature': 'توقيع المدير العام',
+                'fm_signature': 'توقيع مدير المالية',
+                'hod_signature': 'توقيع مدير القسم',
+                // placeholders
+                'employee_placeholder': 'اكتب اسم الموظف أو اختر من القائمة',
+                'id_placeholder': 'رقم الهوية / الإقامة',
+                'job_placeholder': 'المسمى الوظيفي',
+                'decision_placeholder': 'اكتب هنا تفاصيل القرار الإداري...',
+                'date_placeholder': 'يوم/شهر/سنة',
+                'issuer_placeholder': 'اسم مسؤول إدارة الموارد البشرية',
+                // قائمة الخيارات لأنواع الأوامر
+                'option_salary_increase': 'زيادة راتب',
+                'option_promotion': 'ترقية',
+                'option_contract_renewal': 'تجديد عقد عمل',
+                'option_transfer': 'نقل',
+                'option_warning': 'إنذار',
+                'option_deduction': 'خصم',
+                'option_bonus': 'مكافأة',
+                'option_salary_adjustment': 'تعديل راتب',
+                'option_leave': 'إجازة',
+                'option_termination': 'إنهاء خدمة',
+                'option_other': 'أخرى',
+                // قائمة الأقسام
+                'option_select_dept': 'اختر القسم',
+                'option_accounting': 'المحاسبة',
+                'option_sales': 'المبيعات',
+                'option_warehouse': 'ادارة مستودعات',
+                'option_transport': 'النقليات',
+                'option_machinery': 'الاليات',
+                'option_projects': 'المشاريع',
+                'option_marble': 'الرخام',
+                'option_design': 'التصميم',
+                'option_social': 'السوشيال ميديا',
+                'option_select_supervisor': 'اختر المسؤول',
+                // مقدمة القرار
+                'decision_intro': 'قررنا نحن شركة فالنسيا للرخام والحجر الطبيعي ادارة الموارد البشــــــرية باتخاذ القرار التالي :-',
+                // رسائل التليجرام (جزء منها)
+                'telegram_title': '📋 *أمر إداري جديد - شركة فالنسيا للرخام*',
+                'telegram_order_info': '📅 *معلومات الأمر:*',
+                'telegram_employee_info': '👤 *معلومات الموظف:*',
+                'telegram_decision': '📜 *تفاصيل القرار:*',
+                'telegram_footer': '🏛️ *شركة فالنسيا لتجارة الرخام والحجر الطبيعي*\n📞 إدارة الموارد البشرية\n🔄 *تم إنشاء هذا الأمر آلياً عبر النظام الإلكتروني*\n📊 *جميع الحقوق محفوظة ©',
+                // الإشعارات
+                'notification_saved': '✅ تم إضافة الموظف "{name}" إلى القائمة',
+                'notification_reset': '✅ تم تصفير الرقم التسلسلي بنجاح',
+                'notification_enter_name': '❌ يرجى إدخال اسم الموظف أولاً',
+                'notification_enter_details': '❌ يرجى إدخال تفاصيل القرار',
+                'notification_sending': '🔄 جاري إرسال الأمر إلى الموارد البشرية...',
+                'notification_sent': '✅ تم إرسال أمر "{name}" إلى الموارد البشرية',
+                'notification_failed': '❌ فشل إرسال الأمر، يرجى المحاولة لاحقاً',
+                'notification_error': '❌ حدث خطأ أثناء الإرسال التلقائي',
+                'notification_serial_saved': '✅ تم حفظ إعدادات الرقم التسلسلي',
+                'notification_backup_restored': '✅ تم استعادة النسخة الاحتياطية',
+                'notification_backup_failed': '❌ فشل استعادة النسخة الاحتياطية',
+            },
+            en: {
+                'system-title': '<i class="fas fa-file-contract"></i> Administrative Orders System',
+                'company-subtitle-header': 'Valencia Marble & Natural Stone Trading Co.',
+                'print_send': 'Print & Auto Send',
+                'manage_serial': 'Manage Serial Number',
+                'reset_serial': 'Reset Serial Number',
+                'current_order_num': 'Current Order Number:',
+                'auto_save_note': 'Data is automatically saved in browser',
+                'admin_order': 'ADMINISTRATIVE ORDER',
+                'number_abbr': 'No.',
+                'order_type': 'Order Type:',
+                'employee_name': 'Employee Name:',
+                'id_number': 'ID Number:',
+                'job_title': 'Job Title:',
+                'department': 'Department:',
+                'direct_supervisor': 'Direct Supervisor:',
+                'decision_details': 'Decision Details:',
+                'effective_date': 'Effective Date:',
+                'issuer_name': 'Issuer Name:',
+                'signatures_title': 'Officials Signatures',
+                'gm_signature': 'General Manager',
+                'fm_signature': 'Finance Manager',
+                'hod_signature': 'Department Head',
+                // placeholders
+                'employee_placeholder': 'Type employee name or select from list',
+                'id_placeholder': 'Nationality / Residence ID',
+                'job_placeholder': 'Job title',
+                'decision_placeholder': 'Write the administrative decision details here...',
+                'date_placeholder': 'dd/mm/yyyy',
+                'issuer_placeholder': 'HR Manager name',
+                // options
+                'option_salary_increase': 'Salary Increase',
+                'option_promotion': 'Promotion',
+                'option_contract_renewal': 'Contract Renewal',
+                'option_transfer': 'Transfer',
+                'option_warning': 'Warning',
+                'option_deduction': 'Deduction',
+                'option_bonus': 'Bonus',
+                'option_salary_adjustment': 'Salary Adjustment',
+                'option_leave': 'Leave',
+                'option_termination': 'Termination',
+                'option_other': 'Other',
+                // departments
+                'option_select_dept': 'Select Department',
+                'option_accounting': 'Accounting',
+                'option_sales': 'Sales',
+                'option_warehouse': 'Warehouse Management',
+                'option_transport': 'Transport',
+                'option_machinery': 'Machinery',
+                'option_projects': 'Projects',
+                'option_marble': 'Marble',
+                'option_design': 'Design',
+                'option_social': 'Social Media',
+                'option_select_supervisor': 'Select Supervisor',
+                // intro
+                'decision_intro': 'We, Valencia Marble & Natural Stone Co., Human Resources Department, have decided the following: -',
+                // telegram
+                'telegram_title': '📋 *New Administrative Order - Valencia Marble*',
+                'telegram_order_info': '📅 *Order Information:*',
+                'telegram_employee_info': '👤 *Employee Information:*',
+                'telegram_decision': '📜 *Decision Details:*',
+                'telegram_footer': '🏛️ *Valencia Marble & Natural Stone Trading Co.*\n📞 HR Department\n🔄 *This order was automatically generated by the electronic system*\n📊 *All rights reserved ©',
+                // notifications
+                'notification_saved': '✅ Employee "{name}" added to list',
+                'notification_reset': '✅ Serial number reset successfully',
+                'notification_enter_name': '❌ Please enter employee name',
+                'notification_enter_details': '❌ Please enter decision details',
+                'notification_sending': '🔄 Sending order to HR...',
+                'notification_sent': '✅ Order for "{name}" sent to HR',
+                'notification_failed': '❌ Failed to send order, please try again later',
+                'notification_error': '❌ An error occurred during automatic sending',
+                'notification_serial_saved': '✅ Serial number settings saved',
+                'notification_backup_restored': '✅ Backup restored successfully',
+                'notification_backup_failed': '❌ Failed to restore backup',
+            }
+        };
+
+        let currentLang = 'ar'; // اللغة الافتراضية
+
+        // دالة تبديل اللغة
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.body.setAttribute('lang', currentLang);
+            document.documentElement.setAttribute('lang', currentLang);
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            // تحديث النصوص
+            applyTranslations();
+            
+            // تحديث زر اللغة
+            document.getElementById('lang-btn-text').textContent = currentLang === 'ar' ? 'English' : 'العربية';
+            
+            // حفظ التفضيل
+            localStorage.setItem('valenciaLang', currentLang);
+            
+            // تحديث مقدمة القرار
+            document.getElementById('decision-intro').textContent = translations[currentLang]['decision_intro'];
+        }
+
+        // تطبيق الترجمات على جميع العناصر التي تحمل data-i18n
+        function applyTranslations() {
+            // ترجمة النصوص الثابتة
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+                        // لا نترجم القيمة للمدخلات
+                    } else if (el.tagName === 'OPTION') {
+                        // سنتعامل مع الخيارات بشكل منفصل
+                    } else {
+                        el.innerHTML = translations[currentLang][key];
+                    }
+                }
+            });
+            
+            // ترجمة الـ placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[currentLang][key]) {
+                    el.placeholder = translations[currentLang][key];
+                }
+            });
+            
+            // ترجمة خيارات الـ select
+            document.querySelectorAll('[data-i18n-option]').forEach(el => {
+                const key = el.getAttribute('data-i18n-option');
+                if (translations[currentLang][key]) {
+                    el.textContent = translations[currentLang][key];
+                }
+            });
+
+            // ترجمة عنوان النظام داخل الـ H2 (مع الأيقونة)
+            const sysTitle = document.getElementById('system-title');
+            if (sysTitle) sysTitle.innerHTML = translations[currentLang]['system-title'];
+            
+            const subHeader = document.getElementById('company-subtitle-header');
+            if (subHeader) subHeader.textContent = translations[currentLang]['company-subtitle-header'];
+        }
 
         // =============================================
         // مدير الرقم التسلسلي المحسن
@@ -1048,7 +1309,7 @@
                 this.config = {
                     PREFIX: 'ORD',
                     DIGITS: 6,
-                    RESET_MODE: 'NEVER', // NEVER, DAILY, MONTHLY, YEARLY
+                    RESET_MODE: 'NEVER',
                     SEPARATOR: '-',
                     INCLUDE_DATE: false,
                     DATE_FORMAT: 'YYYYMMDD'
@@ -1061,7 +1322,6 @@
                 this.checkReset();
             }
 
-            // تحميل الإعدادات من localStorage
             loadConfig() {
                 const savedConfig = localStorage.getItem('valenciaSerialConfig');
                 if (savedConfig) {
@@ -1073,12 +1333,10 @@
                 }
             }
 
-            // حفظ الإعدادات في localStorage
             saveConfig() {
                 localStorage.setItem('valenciaSerialConfig', JSON.stringify(this.config));
             }
 
-            // تحميل العداد من localStorage مع التحقق من التاريخ
             loadCounter() {
                 const counterData = localStorage.getItem('valenciaOrderCounterData');
 
@@ -1087,15 +1345,12 @@
                         const data = JSON.parse(counterData);
                         this.counter = data.counter || 1;
                         this.lastUpdate = data.lastUpdate ? new Date(data.lastUpdate) : new Date();
-
-                        // حفظ نسخة احتياطية
                         this.backupCounter(data);
                     } catch (e) {
                         console.error('خطأ في تحميل بيانات العداد:', e);
                         this.resetToDefault();
                     }
                 } else {
-                    // التوافق مع الإصدار القديم
                     const oldCounter = localStorage.getItem('valenciaOrderCounter');
                     if (oldCounter) {
                         this.counter = parseInt(oldCounter) || 1;
@@ -1104,7 +1359,6 @@
                 }
             }
 
-            // حفظ العداد في localStorage
             saveCounter() {
                 const data = {
                     counter: this.counter,
@@ -1114,36 +1368,27 @@
                 };
 
                 localStorage.setItem('valenciaOrderCounterData', JSON.stringify(data));
-
-                // تحديث العداد البسيط للتوافق مع الإصدار القديم
                 localStorage.setItem('valenciaOrderCounter', this.counter);
             }
 
-            // نسخ احتياطي للعداد
             backupCounter(data) {
                 const backups = JSON.parse(localStorage.getItem('valenciaCounterBackups') || '[]');
-
-                // الاحتفاظ بآخر 10 نسخ احتياطية فقط
                 if (backups.length >= 10) {
                     backups.shift();
                 }
-
                 backups.push({
                     ...data,
                     backupDate: new Date().toISOString()
                 });
-
                 localStorage.setItem('valenciaCounterBackups', JSON.stringify(backups));
             }
 
-            // إعادة التعيين الافتراضية
             resetToDefault() {
                 this.counter = 1;
                 this.lastUpdate = new Date();
                 this.saveCounter();
             }
 
-            // التحقق من الحاجة لإعادة التعيين بناءً على النمط
             checkReset() {
                 const now = new Date();
 
@@ -1155,33 +1400,23 @@
                             this.resetCounter(1);
                         }
                         break;
-
                     case 'MONTHLY':
                         if (this.lastUpdate.getMonth() !== now.getMonth() ||
                             this.lastUpdate.getFullYear() !== now.getFullYear()) {
                             this.resetCounter(1);
                         }
                         break;
-
                     case 'YEARLY':
                         if (this.lastUpdate.getFullYear() !== now.getFullYear()) {
                             this.resetCounter(1);
                         }
                         break;
-
-                    case 'NEVER':
-                    default:
-                        // لا تعيد التعيين
-                        break;
+                    default: break;
                 }
             }
 
-            // توليد رقم تسلسلي جديد
             generate() {
-                // التحقق من الحاجة لإعادة التعيين
                 this.checkReset();
-
-                // إنشاء الرقم
                 let serialNumber = this.config.PREFIX + this.config.SEPARATOR;
 
                 if (this.config.INCLUDE_DATE) {
@@ -1189,48 +1424,33 @@
                 }
 
                 serialNumber += this.counter.toString().padStart(this.config.DIGITS, '0');
-
-                // زيادة العداد
                 this.counter++;
                 this.saveCounter();
-
                 return serialNumber;
             }
 
-            // الحصول على الرقم الحالي دون زيادة العداد
             getCurrent() {
                 let serialNumber = this.config.PREFIX + this.config.SEPARATOR;
-
                 if (this.config.INCLUDE_DATE) {
                     serialNumber += this.getFormattedDate() + this.config.SEPARATOR;
                 }
-
                 serialNumber += this.counter.toString().padStart(this.config.DIGITS, '0');
-
                 return serialNumber;
             }
 
-            // تنسيق التاريخ
             getFormattedDate() {
                 const now = new Date();
                 const year = now.getFullYear();
                 const month = (now.getMonth() + 1).toString().padStart(2, '0');
                 const day = now.getDate().toString().padStart(2, '0');
-
                 switch (this.config.DATE_FORMAT) {
-                    case 'DDMMYYYY':
-                        return day + month + year;
-                    case 'MMDDYYYY':
-                        return month + day + year;
-                    case 'YYMMDD':
-                        return year.toString().slice(-2) + month + day;
-                    case 'YYYYMMDD':
-                    default:
-                        return year + month + day;
+                    case 'DDMMYYYY': return day + month + year;
+                    case 'MMDDYYYY': return month + day + year;
+                    case 'YYMMDD': return year.toString().slice(-2) + month + day;
+                    default: return year + month + day;
                 }
             }
 
-            // إعادة تعيين العداد
             resetCounter(newValue = 1) {
                 this.counter = newValue;
                 this.lastUpdate = new Date();
@@ -1238,7 +1458,6 @@
                 return this.getCurrent();
             }
 
-            // تعيين العداد لقيمة محددة
             setCounter(value) {
                 if (value >= 1) {
                     this.counter = value;
@@ -1248,14 +1467,12 @@
                 return false;
             }
 
-            // تحديث الإعدادات
             updateConfig(newConfig) {
                 this.config = { ...this.config, ...newConfig };
                 this.saveConfig();
                 return this.getCurrent();
             }
 
-            // الحصول على إحصائيات
             getStats() {
                 return {
                     currentCounter: this.counter,
@@ -1266,17 +1483,14 @@
                 };
             }
 
-            // استعادة نسخة احتياطية
             restoreBackup(index) {
                 const backups = JSON.parse(localStorage.getItem('valenciaCounterBackups') || '[]');
-
                 if (backups[index]) {
                     this.counter = backups[index].counter;
                     this.lastUpdate = new Date(backups[index].lastUpdate);
                     this.saveCounter();
                     return true;
                 }
-
                 return false;
             }
         }
@@ -1293,7 +1507,6 @@
                 this.initEventListeners();
             }
 
-            // الحصول على القائمة الافتراضية للموظفين
             getDefaultEmployees() {
                 return [
                     "برينس انوبيل",
@@ -1309,14 +1522,12 @@
                 ];
             }
 
-            // تحميل الموظفين المحفوظين
             loadSavedEmployees() {
                 const savedEmployees = localStorage.getItem('valenciaEmployees');
                 if (savedEmployees) {
                     try {
                         const parsed = JSON.parse(savedEmployees);
                         if (Array.isArray(parsed) && parsed.length > 0) {
-                            // دمج القوائم مع تجنب التكرار
                             const merged = [...new Set([...parsed, ...this.employees])];
                             this.employees = merged;
                         }
@@ -1326,68 +1537,55 @@
                 }
             }
 
-            // حفظ قائمة الموظفين
             saveEmployees() {
                 localStorage.setItem('valenciaEmployees', JSON.stringify(this.employees));
             }
 
-            // إضافة موظف جديد
             addEmployee(name) {
                 if (!name || !name.trim()) return false;
-
                 const trimmedName = name.trim();
-
-                // التحقق من عدم وجود الموظف مسبقاً
                 if (!this.employees.includes(trimmedName)) {
-                    this.employees.unshift(trimmedName); // إضافة في البداية
+                    this.employees.unshift(trimmedName);
                     this.saveEmployees();
                     return true;
                 }
-
                 return false;
             }
 
-            // البحث عن موظفين
             searchEmployees(query) {
                 if (!query || !query.trim()) {
-                    return this.employees.slice(0, 10); // إرجاع أول 10 موظفين
+                    return this.employees.slice(0, 10);
                 }
-
                 const lowerQuery = query.toLowerCase();
                 return this.employees.filter(employee => 
                     employee.toLowerCase().includes(lowerQuery)
-                ).slice(0, 10); // إرجاع أول 10 نتائج
+                ).slice(0, 10);
             }
 
-            // تهيئة مستمعات الأحداث
             initEventListeners() {
                 const input = document.getElementById('employee-input');
                 const suggestions = document.getElementById('employee-suggestions');
 
                 if (!input) return;
 
-                // عند كتابة في حقل الإدخال
                 input.addEventListener('input', (e) => {
                     const query = e.target.value;
                     this.showSuggestions(query);
-                    saveData(); // حفظ البيانات
+                    saveData();
                 });
 
-                // عند النقر خارج القائمة
                 document.addEventListener('click', (e) => {
                     if (!input.contains(e.target) && !suggestions.contains(e.target)) {
                         suggestions.style.display = 'none';
                     }
                 });
 
-                // عند التركيز على الحقل
                 input.addEventListener('focus', () => {
                     if (input.value.trim() === '') {
                         this.showSuggestions('');
                     }
                 });
 
-                // التعامل مع مفاتيح لوحة المفاتيح
                 input.addEventListener('keydown', (e) => {
                     const items = suggestions.querySelectorAll('.employee-suggestion-item');
                     
@@ -1415,19 +1613,18 @@
                     }
                 });
 
-                // إضافة موظف جديد عند ترك الحقل إذا كان هناك قيمة جديدة
                 input.addEventListener('blur', () => {
                     setTimeout(() => {
                         const value = input.value.trim();
                         if (value && !this.employees.includes(value)) {
                             this.addEmployee(value);
-                            showAutoSendNotification(`✅ تم إضافة الموظف "${value}" إلى القائمة`, 'success');
+                            const msg = translations[currentLang]['notification_saved'].replace('{name}', value);
+                            showAutoSendNotification(msg, 'success');
                         }
                     }, 200);
                 });
             }
 
-            // عرض اقتراحات الموظفين
             showSuggestions(query) {
                 const input = document.getElementById('employee-input');
                 const suggestions = document.getElementById('employee-suggestions');
@@ -1439,16 +1636,13 @@
                 const hasExactMatch = !!exactMatch;
                 const inputValue = query.trim();
 
-                // بناء HTML للاقتراحات
                 let html = '';
 
-                // إذا كان هناك تطابق تام، عرضه أولاً
                 if (hasExactMatch) {
                     html += `<div class="employee-suggestion-item active" data-value="${exactMatch}">${exactMatch}</div>`;
                     this.currentIndex = 0;
                 }
 
-                // عرض النتائج الأخرى
                 results.forEach((employee, index) => {
                     if (employee !== exactMatch) {
                         const adjustedIndex = hasExactMatch ? index + 1 : index;
@@ -1458,12 +1652,10 @@
                     }
                 });
 
-                // إذا كان النص غير موجود في القائمة وعبارة عن اسم جديد
                 if (inputValue && !hasExactMatch && inputValue.length > 2) {
                     html += `<div class="employee-suggestion-item new-employee" 
-                              data-value="${inputValue}">إضافة "${inputValue}" كموظف جديد</div>`;
+                              data-value="${inputValue}">${currentLang === 'ar' ? 'إضافة "' + inputValue + '" كموظف جديد' : 'Add "' + inputValue + '" as new employee'}</div>`;
                     
-                    // تعيين الفهرس النشط إذا لم يكن هناك اقتراحات أخرى
                     if (results.length === 0) {
                         this.currentIndex = 0;
                         suggestions.querySelector('.employee-suggestion-item')?.classList.add('active');
@@ -1473,17 +1665,16 @@
                 suggestions.innerHTML = html;
                 suggestions.style.display = html ? 'block' : 'none';
 
-                // إضافة مستمعات النقر
                 suggestions.querySelectorAll('.employee-suggestion-item').forEach((item, index) => {
                     item.addEventListener('click', () => {
                         const value = item.getAttribute('data-value');
                         
                         if (item.classList.contains('new-employee')) {
-                            // إضافة موظف جديد
                             const newName = input.value.trim();
                             if (newName) {
                                 this.addEmployee(newName);
-                                showAutoSendNotification(`✅ تم إضافة الموظف "${newName}" إلى القائمة`, 'success');
+                                const msg = translations[currentLang]['notification_saved'].replace('{name}', newName);
+                                showAutoSendNotification(msg, 'success');
                             }
                         }
                         
@@ -1495,34 +1686,23 @@
                 });
             }
 
-            // التنقل بين الاقتراحات باستخدام الأسهم
             navigateSuggestions(direction) {
                 const suggestions = document.getElementById('employee-suggestions');
                 const items = suggestions.querySelectorAll('.employee-suggestion-item');
                 
                 if (items.length === 0) return;
 
-                // إزالة النشط من الجميع
                 items.forEach(item => item.classList.remove('active'));
 
-                // تحديث الفهرس
                 this.currentIndex += direction;
 
-                // التأكد من أن الفهرس ضمن النطاق
                 if (this.currentIndex < 0) this.currentIndex = items.length - 1;
                 if (this.currentIndex >= items.length) this.currentIndex = 0;
 
-                // إضافة النشط للعنصر الجديد
                 items[this.currentIndex].classList.add('active');
-
-                // تمرير العنصر إلى العرض
-                items[this.currentIndex].scrollIntoView({
-                    block: 'nearest',
-                    behavior: 'smooth'
-                });
+                items[this.currentIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }
 
-            // اختيار الاقتراح الحالي
             selectCurrentSuggestion() {
                 const suggestions = document.getElementById('employee-suggestions');
                 const items = suggestions.querySelectorAll('.employee-suggestion-item');
@@ -1534,11 +1714,11 @@
                 const value = selectedItem.getAttribute('data-value');
                 
                 if (selectedItem.classList.contains('new-employee')) {
-                    // إضافة موظف جديد
                     const newName = input.value.trim();
                     if (newName) {
                         this.addEmployee(newName);
-                        showAutoSendNotification(`✅ تم إضافة الموظف "${newName}" إلى القائمة`, 'success');
+                        const msg = translations[currentLang]['notification_saved'].replace('{name}', newName);
+                        showAutoSendNotification(msg, 'success');
                     }
                 }
                 
@@ -1547,12 +1727,10 @@
                 saveData();
             }
 
-            // الحصول على قائمة جميع الموظفين
             getAllEmployees() {
                 return [...this.employees];
             }
 
-            // تحميل اسم الموظف الحالي
             loadCurrentEmployee() {
                 const savedData = localStorage.getItem('valenciaOrderData');
                 if (savedData) {
@@ -1561,7 +1739,6 @@
                         if (data.employeeName) {
                             document.getElementById('employee-input').value = data.employeeName;
                             
-                            // إضافة الاسم للقائمة إذا لم يكن موجوداً
                             if (data.employeeName && !this.employees.includes(data.employeeName)) {
                                 this.addEmployee(data.employeeName);
                             }
@@ -1585,10 +1762,18 @@
         // =============================================
 
         document.addEventListener('DOMContentLoaded', function() {
-            // تهيئة مدير الرقم التسلسلي
-            serialManager = new SerialNumberManager();
+            // استرجاع اللغة المحفوظة
+            const savedLang = localStorage.getItem('valenciaLang');
+            if (savedLang && (savedLang === 'ar' || savedLang === 'en')) {
+                currentLang = savedLang;
+            }
+            document.body.setAttribute('lang', currentLang);
+            document.documentElement.setAttribute('lang', currentLang);
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('lang-btn-text').textContent = currentLang === 'ar' ? 'English' : 'العربية';
 
-            // تهيئة مدير الموظفين
+            // تهيئة المديرين
+            serialManager = new SerialNumberManager();
             employeeManager = new EmployeeManager();
 
             // تعيين التواريخ
@@ -1603,6 +1788,10 @@
 
             // تحميل اسم الموظف الحالي
             employeeManager.loadCurrentEmployee();
+
+            // تطبيق الترجمات
+            applyTranslations();
+            document.getElementById('decision-intro').textContent = translations[currentLang]['decision_intro'];
 
             // إضافة مستمعات الأحداث
             document.querySelectorAll('.print-field').forEach(field => {
@@ -1619,7 +1808,6 @@
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const year = now.getFullYear();
             const dateStr = `${day}-${month}-${year}`;
-
             document.getElementById('current-date').textContent = dateStr;
         }
 
@@ -1629,33 +1817,22 @@
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const year = now.getFullYear();
             const dateStr = `${day}/${month}/${year}`;
-
             document.getElementById('effective-date').value = dateStr;
         }
 
-        // تحديث عرض الرقم التسلسلي
         function updateSerialNumberDisplay() {
             if (!serialManager) return;
-
             const serialNum = serialManager.getCurrent();
-
             document.getElementById('serial-number').textContent = serialNum;
             document.getElementById('current-serial-display').textContent = serialNum;
         }
 
-        // دالة إنشاء رقم تسلسلي جديد
         function generateNewSerialNumber() {
             if (!serialManager) return;
-
             const newSerial = serialManager.generate();
             updateSerialNumberDisplay();
-
             return newSerial;
         }
-
-        // =============================================
-        // حفظ واسترجاع البيانات
-        // =============================================
 
         function saveData() {
             const data = {
@@ -1669,7 +1846,6 @@
                 effectiveDate: document.getElementById('effective-date').value,
                 issuerName: document.getElementById('issuer-name').value
             };
-
             localStorage.setItem('valenciaOrderData', JSON.stringify(data));
         }
 
@@ -1678,7 +1854,6 @@
             if (savedData) {
                 try {
                     const data = JSON.parse(savedData);
-
                     document.getElementById('order-type').value = data.orderType || '';
                     document.getElementById('employee-id').value = data.employeeId || '';
                     document.getElementById('job-title').value = data.jobTitle || '';
@@ -1687,8 +1862,6 @@
                     document.getElementById('decision-details').value = data.decisionDetails || '';
                     document.getElementById('effective-date').value = data.effectiveDate || '';
                     document.getElementById('issuer-name').value = data.issuerName || '';
-                    
-                    // اسم الموظف يتم تحميله بشكل منفصل من خلال employeeManager
                 } catch (e) {
                     console.error('خطأ في تحميل البيانات المحفوظة:', e);
                     localStorage.removeItem('valenciaOrderData');
@@ -1696,16 +1869,11 @@
             }
         }
 
-        // =============================================
-        // دالة تصفير الرقم التسلسلي
-        // =============================================
         function resetSerialNumber() {
             if (!serialManager) return;
-
             serialManager.resetCounter(1);
             updateSerialNumberDisplay();
-
-            showAutoSendNotification('✅ تم تصفير الرقم التسلسلي بنجاح', 'success');
+            showAutoSendNotification(translations[currentLang]['notification_reset'], 'success');
             closeResetConfirmation();
         }
 
@@ -1718,31 +1886,31 @@
             const modal = document.getElementById('resetConfirmationModal');
             modal.innerHTML = `
                 <div class="confirmation-content">
-                    <h3><i class="fas fa-exclamation-triangle"></i> تأكيد تصفير الرقم التسلسلي</h3>
+                    <h3><i class="fas fa-exclamation-triangle"></i> ${currentLang === 'ar' ? 'تأكيد تصفير الرقم التسلسلي' : 'Confirm Reset Serial Number'}</h3>
 
-                    <div style="text-align: right; margin: 10px 0; padding: 8px; background: #f8f9fa; border-radius: 3px;">
+                    <div style="text-align: ${currentLang === 'ar' ? 'right' : 'left'}; margin: 10px 0; padding: 8px; background: #f8f9fa; border-radius: 3px;">
                         <div style="margin-bottom: 5px;">
-                            <strong>الرقم التسلسلي الحالي:</strong>
-                            <span style="color: #c53030; font-weight: bold; margin-right: 10px;">${currentSerial}</span>
+                            <strong>${currentLang === 'ar' ? 'الرقم التسلسلي الحالي:' : 'Current Serial:'}</strong>
+                            <span style="color: #c53030; font-weight: bold; margin-${currentLang === 'ar' ? 'right' : 'left'}: 10px;">${currentSerial}</span>
                         </div>
                         <div>
-                            <strong>الرقم التسلسلي الجديد:</strong>
-                            <span style="color: #38a169; font-weight: bold; margin-right: 10px;">${nextSerial}</span>
+                            <strong>${currentLang === 'ar' ? 'الرقم التسلسلي الجديد:' : 'New Serial:'}</strong>
+                            <span style="color: #38a169; font-weight: bold; margin-${currentLang === 'ar' ? 'right' : 'left'}: 10px;">${nextSerial}</span>
                         </div>
                     </div>
 
-                    <p>هل أنت متأكد من أنك تريد تصفير الرقم التسلسلي؟</p>
+                    <p>${currentLang === 'ar' ? 'هل أنت متأكد من أنك تريد تصفير الرقم التسلسلي؟' : 'Are you sure you want to reset the serial number?'}</p>
                     <p style="font-size: 9pt; color: #718096;">
                         <i class="fas fa-info-circle"></i>
-                        سيتم فقدان تسلسل الأرقام الحالي ولا يمكن التراجع عن هذا الإجراء
+                        ${currentLang === 'ar' ? 'سيتم فقدان تسلسل الأرقام الحالي ولا يمكن التراجع عن هذا الإجراء' : 'The current number sequence will be lost and this action cannot be undone.'}
                     </p>
 
                     <div class="confirmation-buttons">
                         <button class="btn-confirm" onclick="confirmResetSerial()">
-                            <i class="fas fa-check"></i> نعم، تصفير
+                            <i class="fas fa-check"></i> ${currentLang === 'ar' ? 'نعم، تصفير' : 'Yes, Reset'}
                         </button>
                         <button class="btn-cancel" onclick="closeResetConfirmation()">
-                            <i class="fas fa-times"></i> إلغاء
+                            <i class="fas fa-times"></i> ${currentLang === 'ar' ? 'إلغاء' : 'Cancel'}
                         </button>
                     </div>
                 </div>
@@ -1762,10 +1930,6 @@
             resetSerialNumber();
         }
 
-        // =============================================
-        // إدارة الرقم التسلسلي
-        // =============================================
-
         function openSerialManager() {
             if (!serialManager) return;
 
@@ -1779,80 +1943,80 @@
 
             modal.innerHTML = `
                 <div class="confirmation-content" style="max-width: 500px;">
-                    <h3><i class="fas fa-cog"></i> إدارة الرقم التسلسلي</h3>
+                    <h3><i class="fas fa-cog"></i> ${currentLang === 'ar' ? 'إدارة الرقم التسلسلي' : 'Manage Serial Number'}</h3>
 
                     <div style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 4px;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <div style="font-weight: bold;">الرقم الحالي:</div>
+                            <div style="font-weight: bold;">${currentLang === 'ar' ? 'الرقم الحالي:' : 'Current Number:'}</div>
                             <div style="color: #1a365d; font-weight: bold; font-size: 14pt;">${stats.nextSerial}</div>
                         </div>
 
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <div>القيمة العددية:</div>
+                            <div>${currentLang === 'ar' ? 'القيمة العددية:' : 'Counter Value:'}</div>
                             <div>${stats.currentCounter}</div>
                         </div>
 
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <div>آخر تحديث:</div>
-                            <div>${new Date(stats.lastUpdate).toLocaleString('ar-EG')}</div>
+                            <div>${currentLang === 'ar' ? 'آخر تحديث:' : 'Last Update:'}</div>
+                            <div>${new Date(stats.lastUpdate).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US')}</div>
                         </div>
 
                         <div style="display: flex; justify-content: space-between;">
-                            <div>عدد النسخ الاحتياطية:</div>
+                            <div>${currentLang === 'ar' ? 'عدد النسخ الاحتياطية:' : 'Backups count:'}</div>
                             <div>${stats.backupsCount}</div>
                         </div>
                     </div>
 
                     <div style="margin: 15px 0;">
                         <h4 style="margin-bottom: 10px; color: #2c5282; font-size: 10.5pt;">
-                            <i class="fas fa-sliders-h"></i> الإعدادات
+                            <i class="fas fa-sliders-h"></i> ${currentLang === 'ar' ? 'الإعدادات' : 'Settings'}
                         </h4>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
                             <div>
-                                <label style="display: block; margin-bottom: 3px; font-size: 9pt;">البادئة:</label>
+                                <label style="display: block; margin-bottom: 3px; font-size: 9pt;">${currentLang === 'ar' ? 'البادئة:' : 'Prefix:'}</label>
                                 <input type="text" id="serial-prefix" value="${stats.config.PREFIX}"
                                        style="width: 100%; padding: 4px;">
                             </div>
 
                             <div>
-                                <label style="display: block; margin-bottom: 3px; font-size: 9pt;">عدد الأرقام:</label>
+                                <label style="display: block; margin-bottom: 3px; font-size: 9pt;">${currentLang === 'ar' ? 'عدد الأرقام:' : 'Digits:'}</label>
                                 <input type="number" id="serial-digits" value="${stats.config.DIGITS}" min="3" max="10"
                                        style="width: 100%; padding: 4px;">
                             </div>
                         </div>
 
                         <div style="margin-bottom: 10px;">
-                            <label style="display: block; margin-bottom: 3px; font-size: 9pt;">نمط إعادة التعيين:</label>
+                            <label style="display: block; margin-bottom: 3px; font-size: 9pt;">${currentLang === 'ar' ? 'نمط إعادة التعيين:' : 'Reset Mode:'}</label>
                             <select id="serial-reset-mode" style="width: 100%; padding: 4px;">
-                                <option value="NEVER" ${stats.config.RESET_MODE === 'NEVER' ? 'selected' : ''}>لا تعيد أبداً</option>
-                                <option value="DAILY" ${stats.config.RESET_MODE === 'DAILY' ? 'selected' : ''}>يومياً</option>
-                                <option value="MONTHLY" ${stats.config.RESET_MODE === 'MONTHLY' ? 'selected' : ''}>شهرياً</option>
-                                <option value="YEARLY" ${stats.config.RESET_MODE === 'YEARLY' ? 'selected' : ''}>سنوياً</option>
+                                <option value="NEVER" ${stats.config.RESET_MODE === 'NEVER' ? 'selected' : ''}>${currentLang === 'ar' ? 'لا تعيد أبداً' : 'Never'}</option>
+                                <option value="DAILY" ${stats.config.RESET_MODE === 'DAILY' ? 'selected' : ''}>${currentLang === 'ar' ? 'يومياً' : 'Daily'}</option>
+                                <option value="MONTHLY" ${stats.config.RESET_MODE === 'MONTHLY' ? 'selected' : ''}>${currentLang === 'ar' ? 'شهرياً' : 'Monthly'}</option>
+                                <option value="YEARLY" ${stats.config.RESET_MODE === 'YEARLY' ? 'selected' : ''}>${currentLang === 'ar' ? 'سنوياً' : 'Yearly'}</option>
                             </select>
                         </div>
 
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <input type="checkbox" id="serial-include-date" ${stats.config.INCLUDE_DATE ? 'checked' : ''}
                                    style="margin-left: 8px;">
-                            <label for="serial-include-date" style="font-size: 9pt;">تضمين التاريخ في الرقم التسلسلي</label>
+                            <label for="serial-include-date" style="font-size: 9pt;">${currentLang === 'ar' ? 'تضمين التاريخ في الرقم التسلسلي' : 'Include date in serial number'}</label>
                         </div>
                     </div>
 
                     ${backups.length > 0 ? `
                     <div style="margin: 15px 0;">
                         <h4 style="margin-bottom: 10px; color: #2c5282; font-size: 10.5pt;">
-                            <i class="fas fa-history"></i> النسخ الاحتياطية
+                            <i class="fas fa-history"></i> ${currentLang === 'ar' ? 'النسخ الاحتياطية' : 'Backups'}
                         </h4>
                         <div style="max-height: 150px; overflow-y: auto; font-size: 8.5pt;">
                             ${backups.map((backup, index) => `
                                 <div style="padding: 5px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between;">
                                     <div>
                                         ${backup.prefix}-${backup.counter.toString().padStart(backup.digits || 6, '0')}
-                                        <br><small>${new Date(backup.backupDate).toLocaleString('ar-EG')}</small>
+                                        <br><small>${new Date(backup.backupDate).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US')}</small>
                                     </div>
                                     <button onclick="restoreBackup(${index})" style="padding: 2px 6px; font-size: 8pt; background: #4a5568; color: white; border: none; border-radius: 2px; cursor: pointer;">
-                                        <i class="fas fa-undo"></i> استعادة
+                                        <i class="fas fa-undo"></i> ${currentLang === 'ar' ? 'استعادة' : 'Restore'}
                                     </button>
                                 </div>
                             `).join('')}
@@ -1863,13 +2027,13 @@
                     <div class="confirmation-buttons" style="justify-content: space-between; margin-top: 15px;">
                         <div>
                             <button class="btn-confirm" onclick="saveSerialSettings()" style="padding: 6px 12px;">
-                                <i class="fas fa-save"></i> حفظ الإعدادات
+                                <i class="fas fa-save"></i> ${currentLang === 'ar' ? 'حفظ الإعدادات' : 'Save Settings'}
                             </button>
                         </div>
 
                         <div>
                             <button class="btn-cancel" onclick="closeSerialManager()" style="padding: 6px 12px;">
-                                <i class="fas fa-times"></i> إغلاق
+                                <i class="fas fa-times"></i> ${currentLang === 'ar' ? 'إغلاق' : 'Close'}
                             </button>
                         </div>
                     </div>
@@ -1899,46 +2063,42 @@
             serialManager.updateConfig(newConfig);
             updateSerialNumberDisplay();
 
-            showAutoSendNotification('✅ تم حفظ إعدادات الرقم التسلسلي', 'success');
+            showAutoSendNotification(translations[currentLang]['notification_serial_saved'], 'success');
             closeSerialManager();
         }
 
         function restoreBackup(index) {
             if (!serialManager) return;
 
-            if (confirm('هل تريد استعادة هذه النسخة الاحتياطية؟')) {
+            if (confirm(currentLang === 'ar' ? 'هل تريد استعادة هذه النسخة الاحتياطية؟' : 'Do you want to restore this backup?')) {
                 const success = serialManager.restoreBackup(index);
 
                 if (success) {
                     updateSerialNumberDisplay();
-                    showAutoSendNotification('✅ تم استعادة النسخة الاحتياطية', 'success');
+                    showAutoSendNotification(translations[currentLang]['notification_backup_restored'], 'success');
                     closeSerialManager();
                     setTimeout(openSerialManager, 500);
                 } else {
-                    showAutoSendNotification('❌ فشل استعادة النسخة الاحتياطية', 'error');
+                    showAutoSendNotification(translations[currentLang]['notification_backup_failed'], 'error');
                 }
             }
         }
 
-        // =============================================
-        // دالة الإرسال التلقائي إلى التليجرام
-        // =============================================
         async function sendToTelegramAuto() {
             const employeeName = document.getElementById('employee-input').value;
 
             if (!employeeName || !employeeName.trim()) {
                 console.log('⚠️ لم يتم إرسال الأمر: اسم الموظف غير موجود');
-                showAutoSendNotification('❌ يرجى إدخال اسم الموظف أولاً', 'error');
+                showAutoSendNotification(translations[currentLang]['notification_enter_name'], 'error');
                 return false;
             }
 
             const decisionDetails = document.getElementById('decision-details').value;
             if (!decisionDetails || !decisionDetails.trim()) {
-                showAutoSendNotification('❌ يرجى إدخال تفاصيل القرار', 'error');
+                showAutoSendNotification(translations[currentLang]['notification_enter_details'], 'error');
                 return false;
             }
 
-            // إضافة الموظف للقائمة إذا كان جديداً
             if (employeeManager) {
                 employeeManager.addEmployee(employeeName);
             }
@@ -1948,29 +2108,27 @@
 
             try {
                 console.log('🔄 جاري إرسال الأمر الإداري تلقائياً إلى الموارد البشرية...');
-                showAutoSendNotification('🔄 جاري إرسال الأمر إلى الموارد البشرية...', 'sending');
+                showAutoSendNotification(translations[currentLang]['notification_sending'], 'sending');
 
                 const success = await sendTelegramMessage(chatId, message);
 
                 if (success) {
                     console.log(`✅ تم إرسال أمر "${employeeName}" تلقائياً إلى الموارد البشرية`);
-                    showAutoSendNotification(`✅ تم إرسال أمر "${employeeName}" إلى الموارد البشرية`, 'success');
+                    const msg = translations[currentLang]['notification_sent'].replace('{name}', employeeName);
+                    showAutoSendNotification(msg, 'success');
                     return true;
                 } else {
                     console.log('❌ فشل الإرسال التلقائي إلى الموارد البشرية');
-                    showAutoSendNotification('❌ فشل إرسال الأمر، يرجى المحاولة لاحقاً', 'error');
+                    showAutoSendNotification(translations[currentLang]['notification_failed'], 'error');
                     return false;
                 }
             } catch (error) {
                 console.error('خطأ في الإرسال التلقائي:', error);
-                showAutoSendNotification('❌ حدث خطأ أثناء الإرسال التلقائي', 'error');
+                showAutoSendNotification(translations[currentLang]['notification_error'], 'error');
                 return false;
             }
         }
 
-        // =============================================
-        // دالة عرض إشعار الإرسال التلقائي
-        // =============================================
         function showAutoSendNotification(message, type = 'success') {
             const existingNotification = document.getElementById('auto-send-notification');
             if (existingNotification) {
@@ -2003,93 +2161,73 @@
             }, 5000);
         }
 
-        // =============================================
-        // دالة الطباعة مع الإرسال التلقائي
-        // =============================================
         async function prepareAndPrint() {
-            // التحقق من اكتمال البيانات
             const employeeName = document.getElementById('employee-input').value;
             if (!employeeName || !employeeName.trim()) {
-                showAutoSendNotification('❌ يرجى إدخال اسم الموظف أولاً', 'error');
+                showAutoSendNotification(translations[currentLang]['notification_enter_name'], 'error');
                 return;
             }
 
             const decisionDetails = document.getElementById('decision-details').value;
             if (!decisionDetails || !decisionDetails.trim()) {
-                showAutoSendNotification('❌ يرجى إدخال تفاصيل القرار', 'error');
+                showAutoSendNotification(translations[currentLang]['notification_enter_details'], 'error');
                 return;
             }
 
-            // إضافة الموظف للقائمة إذا كان جديداً
             if (employeeManager) {
                 employeeManager.addEmployee(employeeName);
             }
 
-            // إنشاء رقم تسلسلي جديد
             generateNewSerialNumber();
 
-            // إرسال تلقائي إلى التليجرام
             const sendResult = await sendToTelegramAuto();
 
-            // الانتظار قليلاً لضمان اكتمال الإرسال قبل الطباعة
             setTimeout(() => {
-                // حفظ البيانات النهائية
                 saveData();
-
-                // فتح نافذة الطباعة
                 window.print();
             }, sendResult ? 1000 : 500);
         }
 
-        // =============================================
-        // توليد رسالة التليجرام
-        // =============================================
         function generateTelegramMessage() {
-            const orderType = document.getElementById('order-type').value || 'غير محدد';
-            const employeeName = document.getElementById('employee-input').value || 'غير معروف';
-            const employeeId = document.getElementById('employee-id').value || 'غير متوفر';
-            const jobTitle = document.getElementById('job-title').value || 'غير محدد';
-            const departmentName = document.getElementById('department-name').value || 'غير محدد';
-            const supervisorName = document.getElementById('supervisor-name').value || 'غير محدد';
-            const decisionDetails = document.getElementById('decision-details').value || 'لا توجد تفاصيل';
-            const effectiveDate = document.getElementById('effective-date').value || 'غير محدد';
-            const issuerName = document.getElementById('issuer-name').value || 'غير محدد';
+            const orderType = document.getElementById('order-type').value || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
+            const employeeName = document.getElementById('employee-input').value || (currentLang === 'ar' ? 'غير معروف' : 'Unknown');
+            const employeeId = document.getElementById('employee-id').value || (currentLang === 'ar' ? 'غير متوفر' : 'Not available');
+            const jobTitle = document.getElementById('job-title').value || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
+            const departmentName = document.getElementById('department-name').value || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
+            const supervisorName = document.getElementById('supervisor-name').value || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
+            const decisionDetails = document.getElementById('decision-details').value || (currentLang === 'ar' ? 'لا توجد تفاصيل' : 'No details');
+            const effectiveDate = document.getElementById('effective-date').value || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
+            const issuerName = document.getElementById('issuer-name').value || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
             const serialNumber = document.getElementById('serial-number').textContent;
             const currentDate = document.getElementById('current-date').textContent;
 
-            let message = `📋 *أمر إداري جديد - شركة فالنسيا للرخام*\n`;
+            let message = translations[currentLang]['telegram_title'] + '\n';
             message += `═══════════════════════════\n\n`;
 
-            message += `📅 *معلومات الأمر:*\n`;
-            message += `• رقم الأمر: ${serialNumber}\n`;
-            message += `• تاريخ الإصدار: ${currentDate}\n`;
-            message += `• تاريخ التنفيذ: ${effectiveDate}\n`;
-            message += `• نوع الأمر: ${orderType}\n`;
-            message += `• مُصْدِر الأمر: ${issuerName}\n\n`;
+            message += translations[currentLang]['telegram_order_info'] + '\n';
+            message += `• ${currentLang === 'ar' ? 'رقم الأمر' : 'Order No.'}: ${serialNumber}\n`;
+            message += `• ${currentLang === 'ar' ? 'تاريخ الإصدار' : 'Issue Date'}: ${currentDate}\n`;
+            message += `• ${currentLang === 'ar' ? 'تاريخ التنفيذ' : 'Effective Date'}: ${effectiveDate}\n`;
+            message += `• ${currentLang === 'ar' ? 'نوع الأمر' : 'Order Type'}: ${orderType}\n`;
+            message += `• ${currentLang === 'ar' ? 'مُصْدِر الأمر' : 'Issuer'}: ${issuerName}\n\n`;
 
-            message += `👤 *معلومات الموظف:*\n`;
-            message += `• الاسم: ${employeeName}\n`;
-            message += `• رقم الهوية: ${employeeId}\n`;
-            message += `• المسمى الوظيفي: ${jobTitle}\n`;
-            message += `• القسم: ${departmentName}\n`;
-            message += `• المشرف المباشر: ${supervisorName}\n\n`;
+            message += translations[currentLang]['telegram_employee_info'] + '\n';
+            message += `• ${currentLang === 'ar' ? 'الاسم' : 'Name'}: ${employeeName}\n`;
+            message += `• ${currentLang === 'ar' ? 'رقم الهوية' : 'ID No.'}: ${employeeId}\n`;
+            message += `• ${currentLang === 'ar' ? 'المسمى الوظيفي' : 'Job Title'}: ${jobTitle}\n`;
+            message += `• ${currentLang === 'ar' ? 'القسم' : 'Department'}: ${departmentName}\n`;
+            message += `• ${currentLang === 'ar' ? 'المشرف المباشر' : 'Supervisor'}: ${supervisorName}\n\n`;
 
-            message += `📜 *تفاصيل القرار:*\n`;
+            message += translations[currentLang]['telegram_decision'] + '\n';
             message += `════════════════════\n`;
             message += `${decisionDetails}\n\n`;
 
             message += `═══════════════════════════\n`;
-            message += `🏛️ *شركة فالنسيا لتجارة الرخام والحجر الطبيعي*\n`;
-            message += `📞 إدارة الموارد البشرية\n`;
-            message += `🔄 *تم إنشاء هذا الأمر آلياً عبر النظام الإلكتروني*\n`;
-            message += `📊 *جميع الحقوق محفوظة © ${new Date().getFullYear()}*\n`;
+            message += translations[currentLang]['telegram_footer'] + ` ${new Date().getFullYear()}*\n`;
 
             return message;
         }
 
-        // =============================================
-        // دالة إرسال رسالة التليجرام (API)
-        // =============================================
         async function sendTelegramMessage(chatId, message) {
             try {
                 const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`;
@@ -2114,19 +2252,16 @@
                     return true;
                 } else {
                     console.error('❌ فشل إرسال الرسالة:', result);
-                    showAutoSendNotification('❌ فشل إرسال الرسالة إلى التليجرام', 'error');
+                    showAutoSendNotification(translations[currentLang]['notification_failed'], 'error');
                     return false;
                 }
 
             } catch (error) {
                 console.error('❌ خطأ في الاتصال:', error);
-                showAutoSendNotification('❌ خطأ في الاتصال بالتليجرام', 'error');
+                showAutoSendNotification(translations[currentLang]['notification_error'], 'error');
                 return false;
             }
         }
     </script>
 </body>
 </html>
-
-
-
